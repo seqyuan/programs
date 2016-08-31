@@ -1,0 +1,235 @@
+#! /usr/bin/env python3
+# coding=utf-8
+
+import argparse
+import sys
+import os
+import configparser
+Bin = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(os.path.join(Bin, 'lib'))
+from dinnerEmail import myconf,select_usr
+import time
+import getpass
+import sqlite3
+import re
+
+__author__='ahworld'
+__mail__= 'ahworld@yodagene.com'
+
+syscmd = 'export LANG=zh_CN.utf8'
+os.system(syscmd)
+
+def dinnerTree(menu,week,Bin,cur,usrDin):
+    print ('\t\t\n大家注意！！！！\n\
+        公司指示: 咱们部门每天订餐过多,如果在oa上申请了加班,可以订餐,如果没有...\n')
+    if not usrDin.has_section('dinner'):
+        usrDin.add_section("dinner")
+    arrnum = usrDin.options('dinner')
+
+    print ('注意！如果菜单不正确可能是忘记了更新,可对照菜单邮件自己修改{0}/menu.ini'.format(Bin))
+    print ('\tusage:\n\t\t<dinner A|B|C> to select\n\t\t<dinner m> to send email\n\t\t<dinner e> to edite your information')
+    for key in menu.items(week):
+        print ('\t\t' + str(key[0]) + '\t\t' + key[1])
+    if len(arrnum) > 0:
+        dinnerInfo = '\n\t\tName------------Dinner\n\n'
+        for key in usrDin.items('dinner'):
+            theUser = select_usr(cur,key[0])
+            dinnerInfo = dinnerInfo + '\t\t' + theUser[2] + '\t\t' + menu.get(week,key[1]) + '\n'
+        print (dinnerInfo)   
+
+def myinput(content):
+    result = ''
+    while(1):
+        try:
+            result = input('>>> ' + content)
+            result = result.rstrip()
+            if result == 'exit':
+                sys.exit(0)
+            else:
+                return result.rstrip()
+        except SystemExit : 
+            print("程序退出，bye")
+            sys.exit(0)
+        except :
+            print("格式错误，请重新输入")
+            pass
+
+def insert_sql(conn,cur,usr):
+    name, mail, group = '', '', ''
+    while(1):
+        name = myinput('请输入你的姓名:\n')
+        if name == '':
+            print("不能为空")
+        else:
+            break
+    mailpatt = re.compile('@yodagene.com$')
+    while(1):
+        mail = myinput('请输入你的邮箱:\n')
+        if re.search(mailpatt , mail): break
+    while(1):
+        group = myinput('请输入你的组别,例如 分析组-RNA&表观组 or 研发组-医学DNA组:\n')
+        if group == '':
+            print("不能为空")
+        else:
+            break
+    insert_sql = "insert into dinnerusr(user,name,email,groups,dinner) values (?,?,?,?,?)"
+    cur.execute(insert_sql,(usr,name,mail,group,''))    
+    conn.commit()
+
+def update_sql(conn,cur,usr):
+    idn, user, name, email, groups, dinner = select_usr(cur,usr)
+    new_name, new_email, new_groups = '', '', ''
+    if name == '':
+        while(1):
+            new_name = myinput('请输入你的姓名:\n')
+            if new_name == '':
+                print("不能为空")
+            else:
+                break
+    else:
+        print ('你的姓名已存在 {0},不需要更改请直接按回车键'.format(name))
+        new_name = myinput('请输入你的姓名:\n')
+    if new_name != '': name = new_name
+
+    mailpatt = re.compile('@yodagene.com$')
+    if email == '':
+        while(1):
+            new_email = myinput('请输入你的邮箱:\n')
+            if re.search(mailpatt , new_email): 
+                break
+            else:
+                print("不能为空")
+    else:
+        print ('你的邮箱已存在 {0},不需要更改请直接按回车键'.format(email))
+        new_email = myinput('请输入你的邮箱:\n')
+    if new_email != '': email = new_email
+
+    if groups == '':
+        while(1):
+            new_groups = myinput('请输入你的组别,例如 分析组-RNA&表观组 or 研发组-医学DNA组:\n')
+            if new_groups == '':
+                print("不能为空")
+            else:
+                break
+    else:
+        print ('你的组名已存在 {0},不需要更改请直接按回车键'.format(groups))
+        new_groups = myinput('请输入你的组别,例如 分析组-RNA&表观组 or 研发组-医学DNA组:\n')
+    if new_groups != '': groups = new_groups    
+
+    update_sql = "update dinnerusr set name = \'{0}\', email = \'{1}\', groups = \'{2}\' where user = \'{3}\'".format(name,email,groups,usr)
+    cur.execute(update_sql)    
+    conn.commit()
+
+def main():
+    usrDin=myconf()
+    menu=myconf()
+    db = os.path.join(Bin,'tmp/usr.db')
+    conn = sqlite3.connect(db)
+    cur = conn.cursor()
+
+    usrDin.readfp(open(Bin + '/usrDinner.ini'))
+    menu.readfp(open(Bin + '/menu.ini'))
+    file = Bin + '/tmp/dinner.sign'
+    if os.path.exists(file):
+        exit('please try again later')
+
+    week = time.strftime("%a")
+    username = getpass.getuser()
+    theUser = select_usr(cur,username)
+    if theUser == 'usrNotExist':
+        print ('你的集群账号 {0} 不在名单中, 需要填写一些信息才能使用这个程序'.format(username))
+        insert_sql(conn,cur,username)
+        sys.exit()
+    if theUser[2] == '' or theUser[3] == '' or theUser[4] == '':
+        print ('你的集群账号 {0} 有一些信息不全, 需要填写一些信息才能使用这个程序\n'.format(username))
+        update_sql(conn,cur,username)
+        sys.exit()
+   
+    if len(sys.argv) == 1:
+        dinnerTree(menu,week,Bin,cur,usrDin)
+
+    elif len(sys.argv) == 2:
+        if sys.argv[1] == 'm':
+            if usrDin.has_section('dinner') and len(usrDin.items('dinner')) > 0:
+                pwd = ''
+                while(1):
+                    pwd = getpass.getpass(prompt='please input the password of {0}:'.format(theUser[3]))
+#                    pwd = myinput('please input the password of {0}:\n'.format(theUser[3]))
+                    if pwd != '':break
+                print ("sending ...")
+                #cmd_touch = 'touch {0}'.format(file)
+                #os.system(cmd_touch)
+                cmd = 'ssh c0008 2> /dev/null \"/yodagene/share/software/install/Python-3.3.2/bin/python3 {0}/dinnerEmail.py -m {1} -pwd {2}\"'.format(Bin,theUser[3],pwd)
+#                print (cmd)
+                os.system(cmd)
+                #if os.path.exists(file):
+                #    os.remove(file)
+                #print ("Dinner email send successfully!")
+            else:
+                print ("今天没人订餐，就不要尝试发邮件了！")
+                sys.exit()
+        elif sys.argv[1] == 'e':
+            update_sql(conn,cur,username)
+            sys.exit()
+
+        else:
+            try:
+                menu.get(week,sys.argv[1])
+                cmd = 'touch ' +  file
+                os.system(cmd)
+
+                if not usrDin.has_section('dinner'):
+                    usrDin.add_section("dinner")
+                if sys.argv[1] == 'N':
+                    try:
+                        ABC = usrDin.get('dinner',username)
+                        usrDin.remove_option('dinner',username)
+                        usrDin.write(open(Bin + '/usrDinner.ini', "w"))
+                        del_dinner = menu.get(week,ABC)
+                        #print ('这就对了！马不停蹄的回家吧~')
+                        print ('你取消了 ' + del_dinner + '!' )
+                    except:                    
+                        print ('你还是先订一份再取消吧！')
+                else:
+                    try:
+                        ABC = usrDin.get('dinner',username)
+                        usrDin.set('dinner',username,sys.argv[1])
+                        usrDin.write(open(Bin + '/usrDinner.ini', "w"))
+                        usr_dinner = menu.get(week,sys.argv[1])
+                        if ABC == sys.argv[1]:
+                            #print ('')
+                            print ('可以很明确的告诉你：你确实订了一份 ' + usr_dinner + '!')
+                        else:           
+                            #print ('')
+                            print ('你把 ' + menu.get(week,ABC) + '换成了 ' + usr_dinner + '!')
+                    except:
+                        usrDin.set('dinner',username,sys.argv[1])
+                        if not usrDin.has_section('usrNum'):
+                            usrDin.add_section("usrNum")
+                            usrDin.set('usrNum','num',str(0))
+                        num = str(int(usrDin.get('usrNum','num')) + 1)
+                        usrDin.set('usrNum','num',num)
+                        usrDin.write(open(Bin + '/usrDinner.ini', "w"))
+                        usr_dinner = menu.get(week,sys.argv[1])
+                        print ('你要订一份 ' + usr_dinner + '!')
+                        if int(num) == 1:
+                            if not usrDin.has_section('firstMan'):
+                                usrDin.add_section("firstMan")
+                            usrDin.set('firstMan','mailMan',username)
+                            #print ('今天由你发邮件订餐哦！')
+                            #print ('记得在 17：00运行<dinner m> 自动发送订餐邮件')
+                        usrDin.write(open(Bin + '/usrDinner.ini', "w"))
+
+            except Exception as e:
+                print (e)
+                print ('ERROR:parameter error\n')
+                dinnerTree(menu,week,Bin,cur,usrDin)
+    else:
+        dinnerTree(menu,week,Bin,cur,usrDin)
+    cur.close()
+    conn.close()
+    if os.path.exists(file):
+        os.remove(file)
+
+if __name__ == '__main__':
+    main()
