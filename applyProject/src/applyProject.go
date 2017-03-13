@@ -40,7 +40,7 @@ func usage() {
 	fmt.Printf("    e|edit [id]             ReEdit the apply project\n")
 	fmt.Printf("    d|delete [id]           Delete the apply project\n\n")
 
-	fmt.Printf("   eu|editusr               ReEdit usr information\n")	
+	fmt.Printf("   eu|editusr               ReEdit usr information\n")
 	fmt.Printf("    o|outDir [dir]          Dir to export apply projects excel file(then you can send it by email)\n")
 	fmt.Printf("    m|mail [out.xlsx]       Send the Excel to taoliu@genome.cn\n\n")
 
@@ -375,7 +375,7 @@ func QueryDB(db *sql.DB, usr string) {
 	rows, err := db.Query("select id, name, project_name, start_time, end_time, project_txt,Pre_target,Complete_standard, need_time from applyProject where groups = ? and flag = 0 order by user", groups)
 	defer rows.Close()
 	if err == nil {
-		Printrows(rows)	
+		Printrows(rows)
 	}
 	os.Exit(1)
 }
@@ -441,7 +441,7 @@ func flagPlus(db *sql.DB, usr string){
 		flags              int
 	)
 	row := db.QueryRow("select groups from usrInfo where user = ?", usr)
-	err := row.Scan(&groups)	
+	err := row.Scan(&groups)
 
 	rows, err := db.Query("select id,flag from applyProject where groups = ? and flag < 2 order by id", groups)
 	checkErr(err)
@@ -483,7 +483,7 @@ func check_project_stat(db *sql.DB, usr string){
 		sub_project_ID    string
 	)
 	rows, err := db.Query("select id,project_name,project_stat,sub_project_ID from applyProject where user = ? and flag = 1 order by id", usr)
-	checkErr(err)	
+	checkErr(err)
 	defer rows.Close()
 	Words := make(map[int]projectid)
 	//w := make(Words)
@@ -673,7 +673,7 @@ func insertDB(db *sql.DB, usr string) {
 		Pre_target        string
 		Complete_standard string
 		need_time         string
-		flag              int         // 0 this week,1 last week ,2 at least 2 two weeks ago 
+		flag              int         // 0 this week,1 last week ,2 at least 2 two weeks ago
 		project_stat      string = "-"
 		sub_project_id    string = "-"
 	)
@@ -681,8 +681,12 @@ func insertDB(db *sql.DB, usr string) {
 	err := row.Scan(&name, &groups)
 
 	project_name = myinput("任务单名称:")
-	start_time = myinput("信息起始日期(格式: 2017/02/14):")
-	end_time = myinput("信息截止日期(格式: 2017/02/29):")
+	now := time.Now()
+	start_time_default = now.Format("2016/01/02")
+	start_time = myinput("信息起始日期(格式: %s):", start_time_default)
+	dd, _ := time.ParseDuration("24h")
+  end_time_default := now.Add(6 * dd)
+	end_time = myinput("信息截止日期(格式: %s):", end_time_default)
 	project_txt = myinput("分析内容:")
 	Pre_target = myinput("预期目标:")
 	Complete_standard = myinput("完成标准:")
@@ -745,12 +749,17 @@ func updateDB(db *sql.DB, id int, linuxUser string) {
 		project_name_new = project_name
 	}
 
-	start_time_new := myinput_compatibleEmpty(fmt.Sprintf("信息起始日期(格式: 2017/02/14): %s", start_time))
+  now := time.Now()
+	start_time_default = now.Format("2016/01/02")
+	
+	start_time_new := myinput_compatibleEmpty(fmt.Sprintf("信息起始日期(格式: %s): %s", start_time_default, start_time))
 	if start_time_new == "" {
 		start_time_new = start_time
 	}
 
-	end_time_new := myinput_compatibleEmpty(fmt.Sprintf("信息截止日期(格式: 2017/02/14): %s", end_time))
+  dd, _ := time.ParseDuration("24h")
+  end_time_default := now.Add(6 * dd)
+	end_time_new := myinput_compatibleEmpty(fmt.Sprintf("信息截止日期(格式: %s): %s", end_time_default, end_time))
 	if end_time_new == "" {
 		end_time_new = end_time
 	}
@@ -794,7 +803,7 @@ func importOldxls(db *sql.DB, excelFileName string){
         Pre_target        string
         Complete_standard string
         need_time         string
-        flags              int = 0         
+        flags              int = 0
     )
     defer db.Close()
     xlFile, err := xlsx.OpenFile(excelFileName)
@@ -807,7 +816,7 @@ func importOldxls(db *sql.DB, excelFileName string){
     for i, row := range sheet.Rows {
         if i == 0 {continue}
         stmt, err := db.Prepare("insert into applyProject(user,name,groups,project_name,start_time,end_time, project_txt,Pre_target,Complete_standard,need_time,flag,project_stat,sub_project_ID) values(?,?,?,?,?,?,?,?,?,?,?,?,?)")
-        checkErr(err)     
+        checkErr(err)
         for ii, cell := range row.Cells {
             text, _ := cell.String()
             switch ii{
@@ -822,7 +831,7 @@ func importOldxls(db *sql.DB, excelFileName string){
                 rowu = db.QueryRow("select user from usrInfo where name = ?", name)
                 err = rowu.Scan(&usr)
                 fmt.Println(usr)
-                checkErr(err)              
+                checkErr(err)
             case 2:
                 start_time = text
             case 3:
@@ -891,7 +900,7 @@ func main() {
 
 	if *flagplus == true{
 		flagPlus(db, usr.Username)
-	} 
+	}
 
 	checkUsrInfoDB(db, usr.Username)
 	check_project_stat(db, usr.Username)
