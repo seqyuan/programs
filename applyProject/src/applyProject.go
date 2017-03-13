@@ -682,10 +682,10 @@ func insertDB(db *sql.DB, usr string) {
 
 	project_name = myinput("任务单名称:")
 	now := time.Now()
-	start_time_default := now.Format("2016/01/02")
+	start_time_default := now.Format("2006/01/02")
 	start_time = myinput(fmt.Sprintf("信息起始日期(格式: %s):", start_time_default))
 	dd, _ := time.ParseDuration("24h")
-  end_time_default := now.Add(6 * dd)
+  end_time_default := now.Add(6 * dd).Format("2006/01/02")
 	end_time = myinput(fmt.Sprintf("信息截止日期(格式: %s):", end_time_default))
 	project_txt = myinput("分析内容:")
 	Pre_target = myinput("预期目标:")
@@ -750,7 +750,7 @@ func updateDB(db *sql.DB, id int, linuxUser string) {
 	}
 
   now := time.Now()
-	start_time_default := now.Format("2016/01/02")
+	start_time_default := now.Format("2006/01/02")
 	
 	start_time_new := myinput_compatibleEmpty(fmt.Sprintf("信息起始日期(格式: %s): %s", start_time_default, start_time))
 	if start_time_new == "" {
@@ -758,7 +758,7 @@ func updateDB(db *sql.DB, id int, linuxUser string) {
 	}
 
   dd, _ := time.ParseDuration("24h")
-  end_time_default := now.Add(6 * dd)
+  end_time_default := now.Add(6 * dd).Format("2006/01/02")
 	end_time_new := myinput_compatibleEmpty(fmt.Sprintf("信息截止日期(格式: %s): %s", end_time_default, end_time))
 	if end_time_new == "" {
 		end_time_new = end_time
