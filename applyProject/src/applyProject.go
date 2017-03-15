@@ -918,6 +918,8 @@ func main() {
 			insertDB(db, usr.Username)
 		case "query", "q":
 			QueryDB(db, usr.Username)
+		case "editusr", "eu":
+			updateUsrInfoDB(db, usr.Username)
 		default:
 			usage()
 		}
@@ -929,8 +931,6 @@ func main() {
 		case "edit", "e":
 			id, _ := strconv.Atoi(flag.Args()[1])
 			updateDB(db, id, usr.Username)
-		case "editusr", "eu":
-			updateUsrInfoDB(db, usr.Username)
 		case "outDir", "o":
 			exportExcel(db, usr.Username, flag.Args()[1])
 		case "mail", "m":
