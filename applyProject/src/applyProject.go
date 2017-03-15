@@ -622,7 +622,7 @@ func updateUsrInfoDB(db *sql.DB, usr string) {
             email_new = email
             break
         } else {
-            match, _ := regexp.MatchString("@genome.cn", email)
+            match, _ := regexp.MatchString("@genome.cn", email_new)
             if match == false {
                 fmt.Println("请输入一个正确的以@genome.cn结尾的邮箱地址")
                 continue
