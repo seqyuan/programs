@@ -1,4 +1,4 @@
-#applyProject
+# applyProject
 
 此程序为方便每周下单申请使用
 
@@ -11,7 +11,7 @@
 "github.com/tealeg/xlsx"
 ```
 
-##install
+## install
 
 使用以下命令下载applyProject程序
 
@@ -26,9 +26,9 @@ make init
 /abspath/applyProject/bin/applyProject -creatdb
 /abspath/applyProject/bin/applyProject -creatusrdb
 ```
-##使用applyProject
+## 使用applyProject
 
-###第一次使用applyProject
+### 第一次使用applyProject
 
 执行以下命令查看使用说明
 
@@ -86,7 +86,7 @@ Command:
     -creatusrdb             Reset usr DB only for admin
     -importOldxls [xlsFile] Import old projects from excel only for admin
 ```
-###确认或者修改用户信息
+### 确认或者修改用户信息
 
 由于输入法等一些原因可能导致输入的用户信息有误，想要检查或者更改可以*eu*参数进行修改或者确认，如下：
 ```
@@ -109,16 +109,16 @@ $apply eu
 ```
 运行`applyProject eu`命令，会提示已输入的用户信息，如果某一项填写有问题可直接输入进行修改，如果不需要做修改，请直接按回车键
 
-###申请任务
+### 申请任务
 
 `applyProject a`
 
 
-###查询所在组已申请任务单
+### 查询所在组已申请任务单
 
 `applyProject q`  或者 `applyProject q|less -S`
 
-###修改某任务单
+### 修改某任务单
 
 如果想修改 id（第一列）为108的任务，执行以下命令：
 
@@ -127,14 +127,14 @@ $apply eu
 会提示已输入的信息，如果某一项填写有问题可直接输入进行修改，如果不需要做修改，请直接按回车键
 
 
-###删除某个任务单
+### 删除某个任务单
 
 如果想删除 id（第一列）为108的任务，执行以下命令：
 
 `applyProject d 108`
 
 
-###连续第二周使用此程序
+### 连续第二周使用此程序
 
 如果上周用此程序申请了任务单，本周再次使用，会首先提示输入上周申请任务的（子项目编号和项目完成情况），如下：
 ```
@@ -148,19 +148,19 @@ $apply
 填写完成后就可以进行本周的项目申请了
 
 
-###导出本周申请项和上周项目完成情况
+### 导出本周申请项和上周项目完成情况
 
 如果确认组内申请任务已经完成需要运行以下命令导出到 excel，运行以下命令就会到出到当前路径
 
 `applyProject o ./`
 
-###发送邮件
+### 发送邮件
 
 检查确认excel无误后，执行以下命令会发送给涛哥，并且抄送给组内所有人
 
 `applyProject m yourExcelFile`
 
-###把本周项目改变为上周项目
+### 把本周项目改变为上周项目
 
 各组组长确认涛哥对本周任务都下单后，运行以下命令，以把本周申请的任务做一个标记，使下周申请时能够跳出，使组员填写项目完成情况
 
@@ -168,7 +168,7 @@ $apply
 
 如果有任务单不符要求，请组长先行联系组员进行项目修改/或者删除项目，导出excel并且发送邮件后，再执行以上命令
 
-###从excel文件导入任务
+### 从excel文件导入任务
 
 如果你是组长，请*确保组员*都使用本程序进行过用户信息的填写，然后运行以下命令，以导入上周申请的任务单
 
