@@ -16,11 +16,11 @@ __mail__= 'seqyuan@gmail.com'
 
 def usage():
 	sys.stderr.write('{0}\n\tAuthor:\t{1}\n\tEmail:\t{2}\n'.format(__doc__,__author__,__mail__))
-	sys.stderr.write("\n\tusage:\n\t\tpython3 {0} infile outfile\n".format(__file__))
-	sys.stderr.write("\n\texample:\n\t\tpython3 {0} fpkm.xls fpkm.boxplot.pdf\n".format(__file__))
+	sys.stderr.write("\n\tusage:\n\t\tpython3 {0} infile outfile title ylabel\n".format(__file__))
+	sys.stderr.write("\n\texample:\n\t\tpython3 {0} fpkm.xls fpkm.boxplot.pdf \'FPKM Distribution\' \'FPKM Value\'\n".format(__file__))
 	sys.exit(1)
 
-def prettify(ax,box_plot,df):
+def prettify(ax,box_plot,df,title,ylabel):
 	colors = [name for name, hex in matplotlib.colors.cnames.items()]
 	for patch, color in zip(box_plot['boxes'], colors):
 		patch.set_facecolor(color)
@@ -31,12 +31,12 @@ def prettify(ax,box_plot,df):
 	for i in aa:
 		ax.spines[i].set_color('black')
 		ax.spines[i].set_linewidth(1)
-	ax.set_ylim([-0.5,30])
-	ax.set_ylabel('FPKM Value')
-	ax.set_title('FPKM Distribution')
+#	ax.set_ylim([-0.5,30])
+	ax.set_ylabel(title)
+	ax.set_title(ylabel)
 
 def main(args):
-	infile,outfile = args
+	infile,outfile,title,ylabel = args
 
 	fig = plt.figure(figsize=(8, 8))
 	ax = fig.add_subplot(111,axisbg='white')
@@ -49,10 +49,10 @@ def main(args):
 	plt.setp(box_plot['caps'], color='black', lw=1)	
 	plt.setp(box_plot['boxes'], color='black')
 
-	prettify(ax,box_plot,df)
+	prettify(ax,box_plot,df,title,ylabel)
 	plt.savefig(outfile)
 
 if __name__ == '__main__':
-	if len(sys.argv) != 3:
+	if len(sys.argv) != 5:
 		usage()
 	main(sys.argv[1:])
