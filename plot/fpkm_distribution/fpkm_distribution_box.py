@@ -32,8 +32,8 @@ def prettify(ax,box_plot,df,title,ylabel):
 		ax.spines[i].set_color('black')
 		ax.spines[i].set_linewidth(1)
 #	ax.set_ylim([-0.5,30])
-	ax.set_ylabel(title)
-	ax.set_title(ylabel)
+	ax.set_ylabel(ylabel)
+	ax.set_title(title)
 
 def main(args):
 	infile,outfile,title,ylabel = args
