@@ -119,7 +119,7 @@ def heatmap(df, fig):
 def main(infile):
     df = read_data(infile)
 
-    fig = plt.figure(figsize=(9,7))
+    fig = plt.figure(figsize=(7,6))
     heatmap(df,fig)
 
 def usage():

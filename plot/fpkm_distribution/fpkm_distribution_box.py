@@ -38,7 +38,7 @@ def prettify(ax,box_plot,df,title,ylabel):
 def main(args):
 	infile,outfile,title,ylabel = args
 
-	fig = plt.figure(figsize=(8, 8))
+	fig = plt.figure(figsize=(6, 6))
 	ax = fig.add_subplot(111,axisbg='white')
 ###-------------导入数据------------
 	df = pd.read_table(infile,header=0,index_col = 0, encoding='utf-8')
