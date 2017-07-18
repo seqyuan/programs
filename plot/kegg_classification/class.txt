@@ -1,0 +1,36 @@
+Group	Classification	Value
+Cell growth and death	A	109
+Transport and catabolism	A	167
+Cell motility	A	32
+Cellular community	A	52
+Signaling molecules and interaction	B	11
+Signal transduction	B	218
+Membrane transport	B	60
+RNA family	C	0
+Transcription	C	105
+Folding, sorting and degradation	C	182
+Translation	C	242
+Replication and repair	C	91
+Enzyme families	D	0
+Metabolism of cofactors and vitamins	D	125
+Lipid metabolism	D	140
+Energy metabolism	D	172
+Overview	D	172
+Amino acid metabolism	D	212
+Carbohydrate metabolism	D	231
+Biosynthesis of other secondary metabolites	D	32
+Metabolism of terpenoids and polyketides	D	34
+Glycan biosynthesis and metabolism	D	50
+Xenobiotics biodegradation and metabolism	D	55
+Metabolism of other amino acids	D	71
+Nucleotide metabolism	D	95
+Immune system	E	100
+Sensory system	E	12
+Development	E	19
+Environmental adaptation	E	19
+Aging	E	31
+Circulatory system	E	35
+Excretory system	E	35
+Digestive system	E	45
+Nervous system	E	57
+Endocrine system	E	99
