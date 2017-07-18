@@ -7,4 +7,7 @@
 `python3 kegg_classification.py -c class.txt -s case_vs_control -o ./`
 
 ## 输出文件示例
- ![](./sample_KEGG_Classification.png)
+ ![结果示例](./sample_KEGG_Classification.png)
+
+## 文献类似的图
+ ![文献类似的图](./from_paper.png)

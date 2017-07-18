@@ -40,7 +40,7 @@ class kegg_class:
         df.reset_index(inplace=True,drop = True)
 
         df['color'] = None
-        colors = ["b","g","r","c","m","y","b","g","r","c","m","y"]
+        colors = ["goldenrod","brown","coral","lavender","teal","b","g","r","c","m","y"]
         df_copy = df.copy()
         ii = -1
         classi = None
@@ -60,22 +60,23 @@ class kegg_class:
         self.N = self.df.shape[0]
 
     def plot_barth(self):
-        self.ax.barh(bottom=range(self.N),width=self.df['Value'],height=0.8,left=0,color=self.df['color'],edgecolor='white',align='center',alpha=1)
+        self.ax.barh(bottom=range(self.N),width=self.df['Value'],height=0.8,left=0,color=self.df['color'],edgecolor='k',align='center',alpha=1)
         for i,row in self.df.iterrows():
             self.ax.text(row['Value'] + self.maxvalue*0.01, i, row['Value'], ha='left', va= 'center',fontsize=7)
 
         self.ax.set_yticks([i for i in range(self.N)])
-        self.ax.set_yticklabels(self.df['Group'],rotation='horizontal',fontsize='x-small')
+        self.ax.set_yticklabels(self.df['Group'],rotation='horizontal',fontsize='smaller')
         self.ax.set_xlabel('Number of Genes')
         self.ax.tick_params(bottom ='on',top='off',left='off',right='off')
 
     def plot_legend(self):
         bottom = 0
         for i,r in self.legend_df.iterrows():
-            self.ax.bar(left=[self.maxvalue*1.1], height=[r['classNum']-0.7], width=4, bottom=bottom,color=i[1],align="edge",edgecolor=i[1])
-            self.ax.text(self.maxvalue*1.14, bottom + (r['classNum'])/2, i[0], ha='left', va= 'center',fontsize=10)
+            self.ax.bar(left=[self.maxvalue*1.12], height=[r['classNum']-0.3], width=4, bottom=bottom-0.345,color=i[1],align="edge",edgecolor=i[1])
+            self.ax.text(self.maxvalue*1.16, bottom + (r['classNum'])/2, i[0], ha='left', va= 'center',fontsize=10)
             bottom += r['classNum']
-
+        self.ax.set_xlim([0,self.maxvalue*1.2])
+        self.ax.set_ylim([-1,self.N+1])
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__,
@@ -98,9 +99,8 @@ def main():
 
     ax.axhline(-1, color='k',linewidth=3)
     ax.set_title('KEGG Classification')
-
+#    ax.set_xlim([0,])
     fig.savefig(os.path.join(args.outDir,"{0}_KEGG_Classification.pdf".format(args.sample)))
     fig.savefig(os.path.join(args.outDir,"{0}_KEGG_Classification.png".format(args.sample)))
-
 if __name__=="__main__": 
     main()
