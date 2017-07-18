@@ -7,4 +7,4 @@
 `python3 kegg_classification.py -c class.txt -s case_vs_control -o ./`
 
 ## 输出文件示例
-![""](https://github.com/seqyuan/programs/tree/master/plot/kegg_classification/sample_KEGG_Classification.png)
+![](https://raw.githubusercontent.com/programs/tree/master/plot/kegg_classification/sample_KEGG_Classification.png)
