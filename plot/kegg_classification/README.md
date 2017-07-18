@@ -1,6 +1,14 @@
 ## 功能
 ### 读入KEGG claffification文件,输出条形图
 
+## 输入文件示例
+
+Group | Classification | Value
+----|------|----
+Cell growth and death | A  | 109
+Transport and catabolism | A  | 167
+Cell motility | A  | 32
+
 ## 用法
 `python3 kegg_classification.py -c class.txt`
 
