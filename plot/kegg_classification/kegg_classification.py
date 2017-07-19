@@ -40,7 +40,7 @@ class kegg_class:
         df.reset_index(inplace=True,drop = True)
 
         df['color'] = None
-        colors = ["goldenrod","brown","coral","lavender","teal","b","g","r","c","m","y"]
+        colors = ["brown","teal","coral","dodgerblue","peru","goldenrod","b","g","r","c","m","y"]
         df_copy = df.copy()
         ii = -1
         classi = None
