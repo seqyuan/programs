@@ -4,7 +4,7 @@
 ## 输入文件示例
 
 Group | Classification | Value
-----|------|----
+:----|:------|:----
 Cell growth and death | A  | 109
 Transport and catabolism | A  | 167
 Cell motility | A  | 32
