@@ -21,8 +21,10 @@ def usage():
 	sys.exit(1)
 
 def prettify(ax,box_plot,df,title,ylabel):
-	colors = [name for name, hex in matplotlib.colors.cnames.items()]
-	for patch, color in zip(box_plot['boxes'], colors):
+#	colors = [name for name, hex in sorted(matplotlib.colors.cnames.items())]
+	cnames =  sorted(list(matplotlib.colors.cnames.keys()))[::2][::-1]
+
+	for patch, color in zip(box_plot['boxes'], cnames):
 		patch.set_facecolor(color)
 
 	ax.set_xticklabels(df.columns,rotation='vertical')
@@ -31,15 +33,16 @@ def prettify(ax,box_plot,df,title,ylabel):
 	for i in aa:
 		ax.spines[i].set_color('black')
 		ax.spines[i].set_linewidth(1)
-#	ax.set_ylim([-0.5,30])
+	ax.set_ylim(bottom=-1)
 	ax.set_ylabel(ylabel)
 	ax.set_title(title)
 
 def main(args):
 	infile,outfile,title,ylabel = args
 
-	fig = plt.figure(figsize=(6, 6))
+	fig = plt.figure(figsize=(6, 4))
 	ax = fig.add_subplot(111,axisbg='white')
+
 ###-------------导入数据------------
 	df = pd.read_table(infile,header=0,index_col = 0, encoding='utf-8')
 ###-------------画图------------
