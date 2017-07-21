@@ -22,7 +22,8 @@ def usage():
 
 def prettify(ax,box_plot,df,title,ylabel):
 #	colors = [name for name, hex in sorted(matplotlib.colors.cnames.items())]
-	cnames =  sorted(list(matplotlib.colors.cnames.keys()))[::2][::-1]
+	goodcolors = ['#004DA1','#F7CA18','#4ECDC4','#F9690E','#B35AA5','#7DCDF3','#0080CC','#F29F41','#DE6298','#C4EFF6','#C8F7C5','#FCECBB','#F9B7B2','#E7C3FC','#81CFE0','#BDC3C7','#EDC0D3','#E5EF64','#4ECDC4','#168D7C','#103652','#D2484C','#E79D01']
+	cnames =  goodcolors + sorted(list(matplotlib.colors.cnames.keys()))[::2][::-1]
 
 	for patch, color in zip(box_plot['boxes'], cnames):
 		patch.set_facecolor(color)
