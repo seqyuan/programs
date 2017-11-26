@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 usage:
-    bar plot the most sudied genes
-    python3 The_Most_Studied_Genes.py -i gene_info_total_human.tsv
+    plot genes on chromosome
+    python3 g.pene_on_chrom.py -i gene_info_total_human.tsv
 
-Created on Sat Nov 11 21:26 2017
+Created on Sun Nov 11 23:23 2017
 author: Zan Yuan
 email: seqyuan@gmail.com
 github: github.com/seqyuan
@@ -56,15 +56,16 @@ def plot_ylabel(df,ax):
     ax.set_yticks([])
     ax.set_ylim([df.shape[0]+1,-1])
 
-def main():
-    parser=argparse.ArgumentParser(description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('-i', '--gene_info', dest='gene_info', required=True, help='gene_info_total_human.tsv', type=str)
-    parser.add_argument('-n', '--topNum', dest='topNum', default=10, help='top number to dispaly', type=int)
-    parser.add_argument('-o', '--outfile', dest='outfile', default=os.path.join(os.path.abspath(os.path.dirname(__file__)),"The_top_citations.pdf"), help='out put pdf file')
-    args=parser.parse_args()
+def main(args):
+    all_gene_counts_file, chromInfo, cytoBand = args
 
-    df = pd.read_table(args.gene_info,header=None,index_col=None,names=['9606','un','-','gene','describe','class','citations'],encoding='utf-8')
+    df_gene_citation_counts = pd.read_table(all_gene_counts_file,header=None,index_col=None,names=['9606','un','id','chrom','start','end','name','describe','funcclass','citations'],encoding='utf-8')
+    df_cytoband = pd.read_table(cytoBand,header=None,index_col=None,names=['chrom','start','end','p','c'],encoding='utf-8')
+    df_chrominfo = pd.read_table(chromInfo,header=None,index_col=None,names=['chrom','length','s'],encoding='utf-8')
+
+    df_cytoband = df_cytoband[df_cytoband['c'] == 'acen']
+
+    
     df = df.sort_values(by=['citations'],ascending=False)
     df.index = list(range(df.shape[0]))
     df = df[['gene','describe','citations']].ix[0:args.topNum-1,:]
@@ -91,4 +92,5 @@ def main():
     fig.savefig(args.outfile)
 
 if __name__ == '__main__':
-    main()
+    args = ['all_gene_counts.tsv','chromInfo.txt','cytoBand.txt']
+    main(args)
