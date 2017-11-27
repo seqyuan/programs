@@ -40,7 +40,14 @@ class kegg_class:
         df.reset_index(inplace=True,drop = True)
 
         df['color'] = None
-        colors = ["brown","teal","coral","dodgerblue","peru","goldenrod","b","g","r","c","m","y"]
+        colors = ['#464451','#DAD9DE','#F0E6DD','#E0BCC8','#A986A7','#3A4340','#4C6371']
+        colors2 = ['#C82FC8','#3952A4','#E22C90','#35B449','#42297A','#D54672','#E5D86F']
+        colors3 = ['#DD82E1','#FFA1C6','#8973E0','#00B2F2','#4473C5','#FFC102','#BBD3C6']
+        colors4 = ["brown","teal","coral","dodgerblue","peru","goldenrod","b","g","r","c","m","y"]       
+        colors.extend(colors2)
+        colors.extend(colors3)
+        colors.extend(colors4)
+
         df_copy = df.copy()
         ii = -1
         classi = None
@@ -60,7 +67,7 @@ class kegg_class:
         self.N = self.df.shape[0]
 
     def plot_barth(self):
-        self.ax.barh(bottom=range(self.N),width=self.df['Value'],height=0.8,left=0,color=self.df['color'],edgecolor='k',align='center',alpha=1)
+        self.ax.barh(bottom=range(self.N),width=self.df['Value'],height=0.8,left=0,color=self.df['color'],edgecolor=self.df['color'],align='center',alpha=1)
         for i,row in self.df.iterrows():
             self.ax.text(row['Value'] + self.maxvalue*0.01, i, row['Value'], ha='left', va= 'center',fontsize=7)
 
@@ -102,5 +109,6 @@ def main():
 #    ax.set_xlim([0,])
     fig.savefig(os.path.join(args.outDir,"{0}_KEGG_Classification.pdf".format(args.sample)))
     fig.savefig(os.path.join(args.outDir,"{0}_KEGG_Classification.png".format(args.sample)))
+
 if __name__=="__main__": 
     main()
