@@ -52,10 +52,9 @@ class chrom_class:
             chr_cen_start = chr_cen.min().min()
             chr_cen_end = chr_cen.max().max()
             boxstyle = "round,pad={0}".format(self.pad)
-
-            left_Rectangle = FancyBboxPatch((0+self.pad, (i*10+1)*self.pad), chr_cen_start - self.pad * 2, self.pad * 7, boxstyle=boxstyle, facecolor='#313131', edgecolor='#313131')
-            right_Rectangle = FancyBboxPatch((chr_cen_end + self.pad, (i*10+1)*self.pad), row['length'] - chr_cen_end - self.pad * 2, self.pad * 7, boxstyle=boxstyle, facecolor='#313131', edgecolor='#313131')
-            cent_Rectangle = FancyBboxPatch((chr_cen_start, (i*10+3)*self.pad), chr_cen_end - chr_cen_start, self.pad * 3, boxstyle="square,pad=0", facecolor='#313131', edgecolor='#313131')            
+            left_Rectangle = FancyBboxPatch((0+self.pad, (i*10+1)*self.pad), chr_cen_start - self.pad, self.pad * 7, boxstyle=boxstyle, facecolor='#313131', edgecolor='#313131')
+            right_Rectangle = FancyBboxPatch((chr_cen_end + self.pad, (i*10+1)*self.pad), row['length'] - chr_cen_end, self.pad * 7, boxstyle=boxstyle, facecolor='#313131', edgecolor='#313131')
+            cent_Rectangle = FancyBboxPatch((chr_cen_start + self.pad, (i*10+3)*self.pad), chr_cen_end - chr_cen_start, self.pad * 3, boxstyle="square,pad=0", facecolor='#313131', edgecolor='#313131')            
             ax.add_patch(left_Rectangle)
             ax.add_patch(right_Rectangle)
             ax.add_patch(cent_Rectangle)
@@ -65,19 +64,35 @@ class chrom_class:
             width = list(chrom_df['end'] - chrom_df['start'])
             bottom=[i*10*self.pad] * len(width)
             height=chrom_df['citations']*7.5*self.pad
-            left=chrom_df['start']
-
+            left=chrom_df['start'] + self.pad
             ax.bar(left=left, height=height, width=width, bottom=bottom,color='y',edgecolor='y',align='edge',alpha=1)
-
+            
         ax.set_yticks([])
         ax.set_yticklabels([])
         ax.set_xticks([])
         ax.set_xticklabels([])
         ax.tick_params(bottom ='off',top='off',left='off',right='off')
-        ax.set_xlim([0,self.df_chrominfo['length'].describe().max()])
+        ax.set_xlim([0,self.df_chrominfo['length'].describe().max() + 2 * self.pad])
         ax.set_ylim([0,self.df_chrominfo.shape[0] * self.pad *10])
 
-
+    def plot_top_10(self,ax):
+        df = self.df_gene_citation_counts[self.df_gene_citation_counts['Ranking'] <= 10]
+        for i, row in df.iterrows():
+            iii = self.df_chrominfo[self.df_chrominfo['chrom']==row['chrom']].index[0] 
+            ax.bar(left=row['start'] + self.pad, height=row['citations']*7.5*self.pad, width=row['end'] - row['start'], bottom=iii*10*self.pad,color='#00AEEF',edgecolor='#00AEEF',align='edge',alpha=1)
+            x = row['start'] + self.pad
+            y = iii*10*self.pad + row['citations']*7.5*self.pad
+            ha = 'left'
+            va= 'bottom'
+            text = str(row['Ranking']) + ' ' + row['name']
+            if row['citations'] == 1:
+                 y = iii*10*self.pad + row['citations']*7*self.pad
+            elif row['citations'] == 8:
+                x = row['start'] - self.pad
+                y = iii*10*self.pad + row['citations']*7.6*self.pad
+                ha = 'right'
+            
+            ax.text(x, y, text, ha=ha, va= va,fontsize=10,color='#00AEEF',fontweight='normal')
 
 def main(args):
     all_gene_counts_file, chromInfo, cytoBand = args
@@ -89,12 +104,13 @@ def main(args):
     
     chrom = chrom_class()
     chrom.Init_read_file(chromInfo, cytoBand, all_gene_counts_file)
-
     chrom.plot_Rounded_Rectangle(ax_chrom)
+    chrom.plot_top_10(ax_chrom)
+    ax_chrom.set_title('<---  Gene position on the chromosome  --->')
 
 
     #plt.show()
-    fig.savefig('jg.pdf')
+    fig.savefig('gene_on_chrom.pdf')
 
 if __name__ == '__main__':
     args = ['all_gene_counts.tsv','chromInfo.txt','cytoBand.txt']
