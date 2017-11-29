@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
-usage:
     bar plot the most sudied genes
-    python3 The_Most_Studied_Genes.py -i gene_info_total_human.tsv
+
+usage:
+
+    python3 The_Most_Studied_Genes.py -i gene_info_total_human.tsv -n 10
 
 Created on Sat Nov 11 21:26 2017
 author: Zan Yuan
@@ -43,7 +45,7 @@ def plot_title(df,ax):
     tt = 'The {0} most studied genes of all time are described in more than {1} papers.'.format(df.shape[0],format(df['citations'].sum(),','))
 
     ax.text(0, 2, t, ha='left', va= 'center',fontsize=17,color='y',fontweight='bold')
-    ax.text(0, 0, tt, ha='left', va= 'center',fontsize=8,color='#00AEEF')
+    ax.text(0, 0, tt, ha='left', va= 'center',fontsize=8,color='w')
     ax.set_ylim([-1,2])
     ax.tick_params(bottom ='off',top='off',left='off',right='off')
     ax.set_xticks([])
@@ -73,11 +75,13 @@ def main():
     if args.topNum > 10:
         h = int(args.topNum/10) * h
 
-    fig = plt.figure(figsize=(6,h))
+    fig = plt.figure(figsize=(6,h),facecolor='k')
 
     [ax_x, ax_y, ax_w, ax_h] = [0.3,0.1,0.6,0.7]
     ax_barh = fig.add_axes([ax_x, ax_y, ax_w, ax_h], frame_on=False, axisbg = '#231F20')
     plot_barth(ax_barh, df, args.topNum)
+    ax_barh.grid(False)
+
 
     [ax1_x, ax1_y, ax1_w, ax1_h] = [0.1,0.1,0.2,0.7]
     ax1 = fig.add_axes([ax1_x, ax1_y, ax1_w, ax1_h], frame_on=False, axisbg = '#231F20')
@@ -88,7 +92,7 @@ def main():
     plot_title(df, ax2)
 
     #plt.show()
-    fig.savefig(args.outfile)
+    fig.savefig(args.outfile,facecolor = fig.get_facecolor(),edgecolor ='none')
 
 if __name__ == '__main__':
     main()
