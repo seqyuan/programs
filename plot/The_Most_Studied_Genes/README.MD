@@ -42,4 +42,4 @@
 `python3 The_Most_Studied_Genes.py -i gene_info_total_human.tsv -n 20`
 
 ### 结果示例
- ![结果示例](./The_top_citations.png)
+ ![结果示例](./gene_on_chrom.png)
