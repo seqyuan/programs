@@ -1,0 +1,66 @@
+GO Term	GO Subterm	Up_Count	Up_Percent	Down_Count	Down_Percent
+biological_process	cellular process	575	0.710754017305315	412	0.832323232323232	
+biological_process	biological regulation	516	0.637824474660074	321	0.648484848484848	
+biological_process	single-organism process	511	0.631644004944376	345	0.696969696969697	
+biological_process	developmental process	296	0.365883807169345	152	0.307070707070707	
+biological_process	metabolic process	296	0.365883807169345	239	0.482828282828283	
+biological_process	response to stimulus	259	0.320148331273177	191	0.385858585858586	
+biological_process	cellular component organization or biogenesis	224	0.276885043263288	216	0.436363636363636	
+biological_process	multicellular organismal process	205	0.253399258343634	81	0.163636363636364	
+biological_process	localization	187	0.23114956736712	82	0.165656565656566	
+biological_process	immune system process	98	0.121137206427689	46	0.0929292929292929	
+biological_process	biological adhesion	95	0.117428924598269	19	0.0383838383838384	
+biological_process	multi-organism process	61	0.0754017305315204	20	0.0404040404040404	
+biological_process	locomotion	60	0.0741656365883807	28	0.0565656565656566	
+biological_process	reproductive process	54	0.0667490729295426	68	0.137373737373737	
+biological_process	growth	40	0.0494437577255871	11	0.0222222222222222	
+biological_process	signaling	24	0.0296662546353523	14	0.0282828282828283	
+biological_process	behavior	23	0.0284301606922126	14	0.0282828282828283	
+biological_process	rhythmic process	15	0.0185414091470952	13	0.0262626262626263	
+biological_process	cell killing	4	0.00494437577255871	0	0	
+biological_process	presynaptic process involved in chemical synaptic transmission	4	0.00494437577255871	0	0	
+biological_process	reproduction	1	0.00123609394313968	0	0	
+biological_process	cell aggregation	1	0.00123609394313968	0	0	
+biological_process	biological phase	1	0.00123609394313968	0	0	
+biological_process	detoxification	0	0	0	0	
+cellular_component	cell part	673	0.831891223733004	452	0.913131313131313	
+cellular_component	organelle	453	0.559950556242274	365	0.737373737373737	
+cellular_component	membrane	346	0.427688504326329	156	0.315151515151515	
+cellular_component	membrane part	344	0.425216316440049	109	0.22020202020202	
+cellular_component	organelle part	305	0.377008652657602	269	0.543434343434343	
+cellular_component	extracellular region part	240	0.296662546353523	100	0.202020202020202	
+cellular_component	macromolecular complex	212	0.262051915945612	189	0.381818181818182	
+cellular_component	cell junction	78	0.0964153275648949	31	0.0626262626262626	
+cellular_component	extracellular region	64	0.0791100123609394	14	0.0282828282828283	
+cellular_component	synapse part	34	0.0420271940667491	10	0.0202020202020202	
+cellular_component	supramolecular complex	26	0.0321384425216316	45	0.0909090909090909	
+cellular_component	synapse	25	0.030902348578492	3	0.00606060606060606	
+cellular_component	membrane-enclosed lumen	24	0.0296662546353523	9	0.0181818181818182	
+cellular_component	other organism part	7	0.00865265760197775	2	0.00404040404040404	
+cellular_component	cell	6	0.00741656365883807	1	0.00202020202020202	
+cellular_component	virion part	2	0.00247218788627936	0	0	
+cellular_component	mitochondrion-associated adherens complex	0	0	0	0	
+cellular_component	viral occlusion body	0	0	0	0	
+cellular_component	nucleoid	0	0	1	0.00202020202020202	
+cellular_component	symplast	0	0	0	0	
+cellular_component	other organism	0	0	0	0	
+cellular_component	virion	0	0	0	0	
+molecular_function	binding	546	0.674907292954265	351	0.709090909090909	
+molecular_function	catalytic 	226	0.279357231149567	181	0.365656565656566	
+molecular_function	molecular transducer 	89	0.110012360939431	28	0.0565656565656566	
+molecular_function	signal transducer 	83	0.102595797280593	27	0.0545454545454545	
+molecular_function	transporter 	76	0.0939431396786156	17	0.0343434343434343	
+molecular_function	molecular function regulator	66	0.0815822002472188	33	0.0666666666666667	
+molecular_function	structural molecule 	38	0.0469715698393078	16	0.0323232323232323	
+molecular_function	nucleic acid binding transcription factor 	36	0.0444993819530284	29	0.0585858585858586	
+molecular_function	transcription factor activity, protein binding	19	0.0234857849196539	11	0.0222222222222222	
+molecular_function	chemorepellent 	5	0.00618046971569839	0	0	
+molecular_function	electron carrier 	5	0.00618046971569839	0	0	
+molecular_function	chemoattractant 	4	0.00494437577255871	2	0.00404040404040404	
+molecular_function	translation regulator 	1	0.00123609394313968	1	0.00202020202020202	
+molecular_function	antioxidant 	1	0.00123609394313968	5	0.0101010101010101	
+molecular_function	metallochaperone 	0	0	0	0	
+molecular_function	D-alanyl carrier 	0	0	0	0	
+molecular_function	morphogen 	0	0	0	0	
+molecular_function	nutrient reservoir 	0	0	0	0	
+molecular_function	protein tag	0	0	0	0	
