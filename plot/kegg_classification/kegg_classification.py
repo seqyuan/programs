@@ -44,9 +44,9 @@ class kegg_class:
         colors2 = ['#C82FC8','#3952A4','#E22C90','#35B449','#42297A','#D54672','#E5D86F']
         colors3 = ['#DD82E1','#FFA1C6','#8973E0','#00B2F2','#4473C5','#FFC102','#BBD3C6']
         colors4 = ["brown","teal","coral","dodgerblue","peru","goldenrod","b","g","r","c","m","y"]       
-        colors.extend(colors2)
-        colors.extend(colors3)
-        colors.extend(colors4)
+        colors4.extend(colors)
+        colors4.extend(colors3)
+        colors4.extend(colors2)
 
         df_copy = df.copy()
         ii = -1
@@ -55,7 +55,7 @@ class kegg_class:
             if classi != r['Classification']:
                 ii += 1
                 classi = r['Classification']
-            df.ix[i,'color'] = colors[ii]
+            df.ix[i,'color'] = colors4[ii]
 
         df['classNum'] = 1
         df2 = df[['Classification','classNum','color']]
@@ -95,8 +95,8 @@ def main():
 
     args=parser.parse_args()
 
-    fig = plt.figure(figsize=(8,8))
-    [ax_x, ax_y, ax_w, ax_h] = [0.35,0.1,0.6,0.8]   #[0.05,0.07,0.07,0.66] 
+    fig = plt.figure(figsize=(7,6))
+    [ax_x, ax_y, ax_w, ax_h] = [0.5,0.1,0.4,0.8]   #[0.05,0.07,0.07,0.66] 
     ax = fig.add_axes([ax_x, ax_y, ax_w, ax_h], frame_on=True, axisbg = 'white')
 
     kc = kegg_class()
