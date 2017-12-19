@@ -95,7 +95,7 @@ def main():
 
     args=parser.parse_args()
 
-    fig = plt.figure(figsize=(7,6))
+    fig = plt.figure(figsize=(7,7))
     [ax_x, ax_y, ax_w, ax_h] = [0.5,0.1,0.4,0.8]   #[0.05,0.07,0.07,0.66] 
     ax = fig.add_axes([ax_x, ax_y, ax_w, ax_h], frame_on=True, axisbg = 'white')
 
