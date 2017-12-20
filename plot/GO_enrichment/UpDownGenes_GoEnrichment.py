@@ -88,7 +88,7 @@ class up_down_go_enrich:
         self.ax.text(self.df.index[-1]+1.5, 50, str('%.1f' %(all_Up/2)), ha='left', va= 'bottom',color=self.Up_color)      
         self.ax.text(self.df.index[-1]+1.5, 50, str('%.1f' %(all_Down/2)), ha='left', va= 'top',color=self.Down_color)
 
-        self.ax.text(self.df.index[-1]+6, 50, 'Number of Genes', ha='center', va= 'center',color='k',rotation='vertical')
+        self.ax.text(self.df.index[-1]+7, 50, 'Number of Genes', ha='center', va= 'center',color='k',rotation='vertical')
         line1, = self.ax.plot([self.df.index[-1]+0.5,self.df.index[-1]+1], [50,50], '-', linewidth=0.2,color='k')
 
 
