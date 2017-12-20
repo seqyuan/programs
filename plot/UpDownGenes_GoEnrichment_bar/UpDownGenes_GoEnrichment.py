@@ -1,15 +1,5 @@
 """
-For KEGG Classification, outfile is sample_KEGG_Classification.pdf
-
-In file format:
-    Group   Classification  Value
-    Cell growth and death   A   109
-    Transport and catabolism    A   167
-    Cell motility   A   32
-    ...
-    ...
-
-Date 20170718
+For plot up down genes go enrichment bar
 """
 import argparse
 import os
