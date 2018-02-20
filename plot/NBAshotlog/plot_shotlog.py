@@ -1,6 +1,9 @@
-import pandas as pd
-shot_df = pd.read_excel('outfile.xlsx', sheetname=0, header=0, index_col=0)
+#import pandas as pd
+#shot_df = pd.read_excel('outfile.xlsx', sheetname=0, header=0, index_col=0)
+
+
 '''
+
 print (shot_df.head())
 import matplotlib
 matplotlib.use('Agg')
@@ -24,7 +27,7 @@ ax.set_ylim(top=-50,bottom=580)
 ax.legend()
 '''
 
-from matplotlib.patches import Circle, Rectangle, Arc
+from matplotlib.patches import Circle, Rectangle, Arc, Wedge
 
 def draw_court(ax=None, color='black', lw=2, outer_lines=False):
     # If an axes object isn't provided to plot onto, just get current one
@@ -41,7 +44,7 @@ def draw_court(ax=None, color='black', lw=2, outer_lines=False):
     # Create backboard
     backboard = Rectangle((-30, -7.5), 60, -1, linewidth=lw, color=color)
 
-    # The paint
+    # The paint 油漆区
     # Create the outer box 0f the paint, width=16ft, height=19ft
     outer_box = Rectangle((-80, -47.5), 160, 190, linewidth=lw, color=color,
                           fill=False)
@@ -49,10 +52,10 @@ def draw_court(ax=None, color='black', lw=2, outer_lines=False):
     inner_box = Rectangle((-60, -47.5), 120, 190, linewidth=lw, color=color,
                           fill=False)
 
-    # Create free throw top arc
+    # Create free throw top arc  罚球线弧顶
     top_free_throw = Arc((0, 142.5), 120, 120, theta1=0, theta2=180,
                          linewidth=lw, color=color, fill=False)
-    # Create free throw bottom arc
+    # Create free throw bottom arc 罚球底弧
     bottom_free_throw = Arc((0, 142.5), 120, 120, theta1=180, theta2=0,
                             linewidth=lw, color=color, linestyle='dashed')
     # Restricted Zone, it is an arc with 4ft radius from center of the hoop
@@ -94,41 +97,52 @@ def draw_court(ax=None, color='black', lw=2, outer_lines=False):
 
     return ax
 
-def test_draw_court(ax=None, color='black', unit=1, outer_lines=False):
-    # If an axes object isn't provided to plot onto, just get current one
+def draw_half_court(ax=None, unit=1, lineColor='white', courtColor='#F7CEA2'):
     if ax is None:
         ax = plt.gca()
 
-
-    hoop = Circle((0, 0), radius=7.5, linewidth=unit*3, color=color, fill=False,capstyle='butt')
-
+    lw = unit * 2 #line width
+    # Create the basketball hoop
+    #篮筐直径(内径)是18IN.,我们设置半径为9.2IN刨除line width 0.2IN,正好为篮筐半径
+    hoop = Wedge((0, 0), unit * 9.2, 0, 360, width=unit * 0.2, color='#767676')
+    hoop_neck = Rectangle((unit * -48, unit * - ), unit * 6, unit * 6, linewidth=None, color='#767676')
+    # Create backboard
+    #Rectangle, lower left at xy = (x, y) with specified width, height and rotation angle
+    backboard = Rectangle((unit * -36, unit * -15 ), unit * 72, lw, linewidth=None, color='#767676')
     # List of the court elements to be plotted onto the axes
-    court_elements = [hoop]
+
+    # Restricted Zone, it is an arc with 4ft radius from center of the hoop 
+    restricted = Wedge((0, 0), unit * 50, 0, 180, width=lw, color='#767676')
+    restricted_left = Rectangle((0, unit * -48 ), lw, unit * 15, linewidth=None, color='#767676')
+    restricted_right = Rectangle((0, unit * 48 ), lw, unit * 15, linewidth=None, color='#767676')
+
+    court_elements = [hoop, hoop_neck, backboard, restricted, restricted_left, restricted_right,
+                        ]
 
     # Add the court elements onto the axes
     for element in court_elements:
         ax.add_patch(element)
 
-    return ax
+    #地板颜色'#F7CEA2'
 
-
-
-fig = plt.figure(figsize=(4.3,4))
-ax = fig.add_subplot(111)
-
+fig = plt.figure(figsize=(7,7))
 plt.axes().set_aspect('equal')
 
-'''
-test_draw_court(ax=ax,outer_lines=True)
+ax = fig.add_subplot(111)
 
-ax.plot([7.5, 7.5], [-7.5, 7.5], 'k-', lw=2)
-ax.plot([5.5, 5.5], [-7.5, 7.5], 'k-', lw=2)
 
-ax.set_xlim(-10,10)
-ax.set_ylim(-20,10)
+
+
+draw_half_court(ax=ax)
+
+#ax.plot([7.5, 7.5], [-7.5, 7.5], 'k-', lw=2)
+#ax.plot([5.5, 5.5], [-7.5, 7.5], 'k-', lw=2)
+
+ax.set_xlim(-300,300)
+ax.set_ylim(-100,500)
 '''
 draw_court(ax=ax,outer_lines=False)
 plt.xlim(-300,300)
 plt.ylim(-100,500)
-
+'''
 plt.show()

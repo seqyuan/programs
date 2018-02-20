@@ -69,8 +69,11 @@ shot log所在的页面标签可能会有改变，有时不在很显眼的位置
 我们以Chrome浏览器为例，在上一步找到的`具体网页对象`页面打开浏览器的开发者选项(更多工具->开发者工具)，然后按F5键，刷新页面，你将得到如下页面
 
 ![shot log API](API.png)
+
 ![request url](request_url.png)
+
 ![request headers](headers.png)
+
 我们按上图红色数字标注，依次点击，选择`Network`，然后点击`XHR`进行过滤，`XHR`是[XMLHttpRequest](https://en.wikipedia.org/wiki/XMLHttpRequest)的简写 - 这是一种用来获取XML或JSON数据的请求类型。经`XHR`筛选后表格中的有几个条目，红色数字标注为3的既是我们将要查找的shot log API，`Preview`标签中包括：
 
 * resource - 请求的名称 shotchartdetail。
