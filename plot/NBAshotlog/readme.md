@@ -180,21 +180,20 @@ plt.show()
 
 [![nba_court_dimensions_h](nba_court_dimensions_h.png "")](http://www.sportscourtdimensions.com/wp-content/uploads/2015/02/nba_court_dimensions_h.png)
 
-通过上图我们知道了篮球场宽度是`50FT`，转换成`INCH`是`600IN`，篮球场长`94FT`，转换成`INCH`是`1128IN`，再结合我们上一步画出的投篮点快速预览图，我们能够推测出`LOC_X`和`LOC_Y`的计算单位是`IN`。
+通过上图我们知道了篮球场宽度是`50FT`，转换成`INCH`是`600IN`，篮球场长`94FT`，转换成`INCH`是`1128IN`，再结合我们上一步画出的投篮点快速预览图，通过对很多球员的`LOC_Y`为0时，`LOC_X`与`SHOT_DISTANCE`，我们能够推测出`LOC_X`和`LOC_Y`的单位与`IN`的换算大概为10/12。
 
 画图函数如下：
 
 ```
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle, Arc, Wedge
-
+from matplotlib.patches import Rectangle, Arc,Wedge
 
 class data_linewidth_plot():
     def __init__(self,**kwargs):
         self.ax = kwargs.pop("ax", plt.gca())
         self.lw_data = kwargs.pop("linewidth", 1)
         self.lw = 1
-        self.ax.figure.canvas.draw()
+        #self.ax.figure.canvas.draw()
         self.ppd=72./fig.dpi
         self.trans = self.ax.transData.transform
         self._resize()
@@ -203,69 +202,62 @@ class data_linewidth_plot():
         lw =  ((self.trans((1,self.lw_data))-self.trans((0,0)))*self.ppd)[1]
         self.lw = lw
 
-def draw_half_court(ax=None, unit=1, lineColor='white', courtColor='#F7CEA2'):
-    if ax is None:
-        ax = plt.gca()
-
+def draw_half_court(ax=None, unit=1):
     lw = unit * 2 #line width
     color = 'k'
-
     # 精确line width
-    court_lw = data_linewidth_plot(ax = ax,linewidth = 1).lw
+    court_lw = data_linewidth_plot(ax = ax,linewidth = lw).lw
 
     ## Create the basketball hoop
     #篮筐直径(内径)是18IN.,我们设置半径为9.2IN刨除line width 0.2IN,正好为篮筐半径
     hoop = Wedge((0, 0), unit * 9.2, 0, 360, width=unit * 0.2, color='#767676')
     hoop_neck = Rectangle((unit * -2, unit * -15 ), unit * 4, unit * 6, linewidth=None, color='#767676')
     
-	## Create backboard
+    ## Create backboard
     #Rectangle, left lower at xy = (x, y) with specified width, height and rotation angle
-    backboard = Rectangle((unit * -36, unit * -15 ), unit * 72, lw, linewidth=None, color='#767676')
+    backboard = Rectangle((unit * -36, unit * -15 ), unit * 72, court_lw, linewidth=None, color='#767676')
     # List of the court elements to be plotted onto the axes
 
     ## Restricted Zone, it is an arc with 4ft radius from center of the hoop 
-    restricted = Arc((0, 0), 96+lw, 96+lw, theta1=0, theta2=180,linewidth=court_lw, color='#767676', fill=False)
-    restricted_left = Rectangle((-48*unit-lw/2, unit * -15 ), 0, unit * 17, linewidth=court_lw, color='#767676')
-    restricted_right = Rectangle((unit*48+lw/2, unit * -15 ), 0, unit * 17, linewidth=court_lw, color='#767676')
+    restricted = Arc((0, 0), 96*unit+court_lw, 96*unit+court_lw, theta1=0, theta2=180,linewidth=court_lw, color='#767676', fill=False)
+    restricted_left = Rectangle((-48*unit-court_lw/2, unit * -15 ), 0, unit * 17, linewidth=court_lw, color='#767676')
+    restricted_right = Rectangle((unit*48+court_lw/2, unit * -15 ), 0, unit * 17, linewidth=court_lw, color='#767676')
 
     # Create free throw top arc  罚球线弧顶
-    top_arc_diameter = 6 * 12 * 2 - lw
+    top_arc_diameter = 6 * 12 * 2*unit - court_lw
     top_free_throw = Arc((0, unit * 164), top_arc_diameter, top_arc_diameter, theta1=0, theta2=180,linewidth=court_lw, color=color, fill=False)
     # Create free throw bottom arc 罚球底弧
-    bottom_free_throw = Arc((0, unit * 164), top_arc_diameter, top_arc_diameter, theta1=180, theta2=0,linewidth=court_lw, color=color, linestyle='dashed')
-
+    bottom_free_throw = Arc((0, unit * 164), top_arc_diameter, top_arc_diameter, theta1=180, theta2=0,linewidth=abs(court_lw), color=color, linestyle='dashed', fill=False)
     # Create the outer box 0f the paint, width=16ft outside , height=18ft 10in
-    outer_box = Rectangle((lw/2 - unit*96, -lw/2 - unit*63), 192-lw, 230-lw, linewidth=court_lw, color=color, fill=False)
+    outer_box = Rectangle((court_lw/2 - unit*96, -court_lw/2 - unit*63), 192*unit-court_lw, 230*unit-court_lw, linewidth=court_lw, color=color, fill=False)
     # Create the inner box of the paint, widt=12ft, height=height=18ft 10in
-    inner_box = Rectangle((lw/2 - unit*72, -lw/2 - unit*63), 144-lw, 230-lw, linewidth=court_lw, color=color, fill=False)
+    inner_box = Rectangle((court_lw/2 - unit*72, -court_lw/2 - unit*63), 144*unit-court_lw, 230*unit-court_lw, linewidth=court_lw, color=color, fill=False)
 
     ## Three point line
     # Create the side 3pt lines, they are 14ft long before they begin to arc
-    corner_three_left = Rectangle((-264*unit+lw/2, -63*unit-lw/2), 0, 169*unit, linewidth=court_lw, color=color)
-    corner_three_right = Rectangle((264*unit-lw/2, -63*unit-lw/2), 0, 169*unit, linewidth=court_lw, color=color)
+    corner_three_left = Rectangle((-264*unit+court_lw/2, -63*unit-court_lw/2), 0, 14*12*unit +court_lw, linewidth=court_lw, color=color)
+    corner_three_right = Rectangle((264*unit-court_lw/2, -63*unit-court_lw/2), 0, 14*12*unit +court_lw, linewidth=court_lw, color=color)
     # 3pt arc - center of arc will be the hoop, arc is 23'9" away from hoop
     # I just played around with the theta values until they lined up with the 
     # threes 
-    three_diameter = (23 * 12 + 9) * 2 - lw
-    three_arc = Arc((0, 0), three_diameter, three_diameter, theta1=22, theta2=158, linewidth=court_lw, color=color)
+    three_diameter = (23 * 12 + 9) * 2*unit - court_lw
+    three_arc = Arc((0, 0), three_diameter, three_diameter, theta1=21.9, theta2=158, linewidth=court_lw, color=color)
 
     # Center Court
-    center_outer_arc = Arc((0, (94*12/2-63)*unit), 48*unit+lw, 48*unit+lw, theta1=180, theta2=0,linewidth=court_lw, color=color)
-    center_inner_arc = Arc((0, (94*12/2-63)*unit), 144*unit-lw, 144*unit-lw, theta1=180, theta2=0,linewidth=court_lw, color=color)
+    center_outer_arc = Arc((0, (94*12/2-63)*unit), 48*unit+court_lw, 48*unit+court_lw, theta1=180, theta2=0,linewidth=court_lw, color=color)
+    center_inner_arc = Arc((0, (94*12/2-63)*unit), 144*unit-court_lw, 144*unit-court_lw, theta1=180, theta2=0,linewidth=court_lw, color=color)
 
     # Draw the half court line, baseline and side out bound lines
-    outer_lines = Rectangle((-25*12*unit - lw/2, -63*unit-lw/2), 50*12*unit+lw, 94/2*12*unit + lw, linewidth=court_lw, color=color, fill=False)
+    outer_lines = Rectangle((-25*12*unit - court_lw/2, -63*unit-court_lw/2), 50*12*unit+court_lw, 94/2*12*unit + court_lw, linewidth=court_lw, color=color, fill=False)
 
     #2 IN. WIDE BY 3 FT. DEEP, 28 FT. INSIDE, 3FT. extenf onto court
 
-    court_elements = [hoop, hoop_neck, backboard, restricted, restricted_left, restricted_right,
-                        top_free_throw,bottom_free_throw,outer_box,inner_box,corner_three_left,corner_three_right,
-                        three_arc,center_outer_arc,center_inner_arc,outer_lines]
+    court_elements = [hoop_neck, backboard, restricted, restricted_left, restricted_right,top_free_throw,bottom_free_throw,
+                        outer_box,inner_box, corner_three_left,corner_three_right,three_arc,center_outer_arc,center_inner_arc,outer_lines]
 
     # Add the court elements onto the axes
     for element in court_elements:
         ax.add_patch(element)
-
 ```
 
 画图：
@@ -284,5 +276,27 @@ plt.show()
 ![court](court.png)
 
 添加上投篮数据
+```
+fig = plt.figure(figsize=(9,8))
+ax = fig.add_subplot(111,aspect='equal')
+ax.set_xlim(-330,330)
+ax.set_ylim(top= -100,bottom = 500)
 
-![court](court.png)
+draw_half_court(ax=ax,unit=10/12)
+
+df_missed = shot_df[shot_df.EVENT_TYPE=='Missed Shot'][['LOC_X','LOC_Y']]
+ax.scatter(df_missed.LOC_X, df_missed.LOC_Y,s=2,color='r',label = 'Missed Shot',alpha=0.5)
+df_made = shot_df[shot_df.EVENT_TYPE=='Made Shot'][['LOC_X','LOC_Y']]
+ax.scatter(df_made.LOC_X, df_made.LOC_Y,s=2,color='b',label = 'Made Shot',alpha=0.5)
+
+legend = ax.legend(bbox_to_anchor=(0.49, 0.13), loc=2, borderaxespad=0.,prop={'size':8},ncol=2,frameon=False)
+plt.axis('off')
+
+FG = "%.1f" % ((df_made.shape[0]/shot_df.shape[0])*100)
+ax.text(-250,440,'FG%:{0}%({1}-{2})'.format(FG,df_made.shape[0],shot_df.shape[0]), fontsize=8)
+ax.text(-250,-63,'FGA for Harden, James during the 2017-18 Regular Season'.format(FG,df_made.shape[0],shot_df.shape[0]), fontsize=8)
+
+plt.show()
+```
+
+![court_shotlog](court_shotlog.png)
