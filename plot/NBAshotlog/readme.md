@@ -235,8 +235,8 @@ def draw_half_court(ax=None, unit=1):
 
     ## Three point line
     # Create the side 3pt lines, they are 14ft long before they begin to arc
-    corner_three_left = Rectangle((-264*unit+court_lw/2, -63*unit-court_lw/2), 0, 14*12*unit +court_lw, linewidth=court_lw, color=color)
-    corner_three_right = Rectangle((264*unit-court_lw/2, -63*unit-court_lw/2), 0, 14*12*unit +court_lw, linewidth=court_lw, color=color)
+    corner_three_left = Rectangle((-264*unit+court_lw/2, -63*unit-court_lw/2), 0, 14*12*unit -court_lw, linewidth=court_lw, color=color)
+    corner_three_right = Rectangle((264*unit-court_lw/2, -63*unit-court_lw/2), 0, 14*12*unit -court_lw, linewidth=court_lw, color=color)
     # 3pt arc - center of arc will be the hoop, arc is 23'9" away from hoop
     # I just played around with the theta values until they lined up with the 
     # threes 
@@ -278,16 +278,17 @@ plt.show()
 添加上投篮数据
 ```
 fig = plt.figure(figsize=(9,8))
-ax = fig.add_subplot(111,aspect='equal')
+#ax = fig.add_subplot(111,aspect='equal')
+ax = fig.add_axes([0.01, 0.01, 0.99, 0.99], frame_on=True, axisbg = 'white',aspect='equal')
 ax.set_xlim(-330,330)
 ax.set_ylim(top= -100,bottom = 500)
 
 draw_half_court(ax=ax,unit=10/12)
 
 df_missed = shot_df[shot_df.EVENT_TYPE=='Missed Shot'][['LOC_X','LOC_Y']]
-ax.scatter(df_missed.LOC_X, df_missed.LOC_Y,s=2,color='r',label = 'Missed Shot',alpha=0.5)
+ax.scatter(df_missed.LOC_X, df_missed.LOC_Y,s=5,color='r',label = 'Missed Shot',alpha=0.5)
 df_made = shot_df[shot_df.EVENT_TYPE=='Made Shot'][['LOC_X','LOC_Y']]
-ax.scatter(df_made.LOC_X, df_made.LOC_Y,s=2,color='b',label = 'Made Shot',alpha=0.5)
+ax.scatter(df_made.LOC_X, df_made.LOC_Y,s=5,color='b',label = 'Made Shot',alpha=0.5)
 
 legend = ax.legend(bbox_to_anchor=(0.49, 0.13), loc=2, borderaxespad=0.,prop={'size':8},ncol=2,frameon=False)
 plt.axis('off')
